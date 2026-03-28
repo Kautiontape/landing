@@ -354,11 +354,12 @@
           <span class="group-icon">&#128218;</span>
           <span class="group-name">Archidekt</span>
         </div>
-        <div class="group-desc">Fetch public decks, browse a user's decklists, or export decks as importable card lists.</div>
+        <div class="group-desc">Fetch public decks, browse a user's decklists, export decks, or generate Archidekt-importable lists with categories and labels.</div>
         <div class="tools">
           <span class="tool-tag">archidekt_deck</span>
           <span class="tool-tag">archidekt_user_decks</span>
           <span class="tool-tag">archidekt_export</span>
+          <span class="tool-tag">format_archidekt</span>
         </div>
       </div>
 
@@ -381,9 +382,9 @@
         <div class="endpoint-row">
           <div>
             <div class="endpoint-label">MCP Endpoint</div>
-            <div class="endpoint-url">https://mcp.kautiontape.com/mcp</div>
+            <div class="endpoint-url">https://mcp.kautiontape.com/mtg/mcp</div>
           </div>
-          <button class="copy-btn" onclick="copyUrl(this, 'https://mcp.kautiontape.com/mcp')">copy</button>
+          <button class="copy-btn" onclick="copyUrl(this, 'https://mcp.kautiontape.com/mtg/mcp')">copy</button>
         </div>
       </div>
     </div>
@@ -399,13 +400,13 @@
         <pre><span class="brace">{</span>
   <span class="key">"mcpServers"</span><span class="brace">:</span> <span class="brace">{</span>
     <span class="key">"mystic-forge"</span><span class="brace">:</span> <span class="brace">{</span>
-      <span class="key">"url"</span><span class="brace">:</span> <span class="str">"https://mcp.kautiontape.com/mcp"</span>
+      <span class="key">"url"</span><span class="brace">:</span> <span class="str">"https://mcp.kautiontape.com/mtg/mcp"</span>
     <span class="brace">}</span>
   <span class="brace">}</span>
 <span class="brace">}</span></pre>
       </div>
       <p>
-        No authentication required. All 16 tools are available through a single connection.
+        No authentication required. All 17 tools are available through a single connection.
       </p>
     </div>
 
@@ -426,7 +427,7 @@
     function copyConfig(btn) {
       const config = JSON.stringify({
         mcpServers: {
-          "mystic-forge": { url: "https://mcp.kautiontape.com/mcp" }
+          "mystic-forge": { url: "https://mcp.kautiontape.com/mtg/mcp" }
         }
       }, null, 2);
       navigator.clipboard.writeText(config).then(() => {
