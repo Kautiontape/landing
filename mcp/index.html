@@ -128,6 +128,9 @@
     .tool-group:nth-child(2) { animation-delay: 0.1s; }
     .tool-group:nth-child(3) { animation-delay: 0.15s; }
     .tool-group:nth-child(4) { animation-delay: 0.2s; }
+    .tool-group:nth-child(5) { animation-delay: 0.25s; }
+    .tool-group:nth-child(6) { animation-delay: 0.3s; }
+    .tool-group:nth-child(7) { animation-delay: 0.35s; }
 
     @keyframes cardIn {
       to { opacity: 1; transform: translateY(0); }
@@ -374,6 +377,42 @@
           <span class="tool-tag">validate_archidekt_deck</span>
         </div>
       </div>
+
+      <div class="tool-group">
+        <div class="group-header">
+          <span class="group-icon">&#9889;</span>
+          <span class="group-name">Commander Spellbook</span>
+        </div>
+        <div class="group-desc">Search for infinite combos and synergies from the Commander Spellbook database, with step-by-step instructions.</div>
+        <div class="tools">
+          <span class="tool-tag">spellbook_combos</span>
+          <span class="tool-tag">spellbook_card_combos</span>
+        </div>
+      </div>
+
+      <div class="tool-group">
+        <div class="group-header">
+          <span class="group-icon">&#128220;</span>
+          <span class="group-name">Rulings</span>
+        </div>
+        <div class="group-desc">Official Wizards of the Coast rulings for any card — interactions, edge cases, and errata.</div>
+        <div class="tools">
+          <span class="tool-tag">scryfall_rulings</span>
+        </div>
+      </div>
+
+      <div class="tool-group">
+        <div class="group-header">
+          <span class="group-icon">&#127183;</span>
+          <span class="group-name">Precon Decks</span>
+        </div>
+        <div class="group-desc">Search and fetch preconstructed decklists from 2700+ official decks, with Archidekt export.</div>
+        <div class="tools">
+          <span class="tool-tag">precon_search</span>
+          <span class="tool-tag">precon_decklist</span>
+          <span class="tool-tag">precon_export</span>
+        </div>
+      </div>
     </div>
 
     <div class="endpoint-section">
@@ -406,7 +445,7 @@
 <span class="brace">}</span></pre>
       </div>
       <p>
-        No authentication required. All 17 tools are available through a single connection.
+        No authentication required. All 23 tools are available through a single connection.
       </p>
     </div>
 
