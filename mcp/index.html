@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MCP Servers — kautiontape</title>
+  <title>Mystic Forge — kautiontape</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -53,7 +53,6 @@
       padding: 3rem 1.5rem 4rem;
     }
 
-    /* back link */
     .back {
       display: inline-flex;
       align-items: center;
@@ -67,10 +66,7 @@
     }
     .back:hover { color: var(--yellow); }
 
-    /* header */
-    header {
-      margin-bottom: 2.5rem;
-    }
+    header { margin-bottom: 2.5rem; }
 
     .brand {
       display: flex;
@@ -82,13 +78,7 @@
     .brand-stripe {
       width: 4px;
       height: 2.25rem;
-      background: repeating-linear-gradient(
-        -45deg,
-        var(--yellow),
-        var(--yellow) 3px,
-        var(--bg) 3px,
-        var(--bg) 6px
-      );
+      background: repeating-linear-gradient(-45deg, var(--yellow), var(--yellow) 3px, var(--bg) 3px, var(--bg) 6px);
       border-radius: 2px;
     }
 
@@ -109,14 +99,23 @@
       padding-left: 1.25rem;
     }
 
-    /* server cards */
-    .servers {
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
+
+    .tool-groups {
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
     }
 
-    .server {
+    .tool-group {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -125,54 +124,41 @@
       transform: translateY(12px);
       animation: cardIn 0.4s ease forwards;
     }
-    .server:nth-child(1) { animation-delay: 0.1s; }
-    .server:nth-child(2) { animation-delay: 0.2s; }
+    .tool-group:nth-child(1) { animation-delay: 0.05s; }
+    .tool-group:nth-child(2) { animation-delay: 0.1s; }
+    .tool-group:nth-child(3) { animation-delay: 0.15s; }
+    .tool-group:nth-child(4) { animation-delay: 0.2s; }
 
     @keyframes cardIn {
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .server-header {
+    .group-header {
       display: flex;
       align-items: center;
       gap: 0.65rem;
-      margin-bottom: 0.65rem;
+      margin-bottom: 0.5rem;
     }
 
-    .server-icon {
-      font-size: 1.4rem;
-      line-height: 1;
-    }
+    .group-icon { font-size: 1.2rem; line-height: 1; }
 
-    .server-name {
+    .group-name {
       font-family: var(--mono);
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       font-weight: 700;
     }
 
-    .server-desc {
-      font-size: 0.85rem;
+    .group-desc {
+      font-size: 0.82rem;
       color: var(--text-mid);
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-
-    /* tools list */
-    .tools-label {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      font-weight: 500;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.5rem;
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
     }
 
     .tools {
       display: flex;
       flex-wrap: wrap;
       gap: 0.4rem;
-      margin-bottom: 1.25rem;
     }
 
     .tool-tag {
@@ -185,8 +171,23 @@
       border-radius: 4px;
     }
 
-    /* endpoint box */
+    /* endpoint */
+    .endpoint-section {
+      margin-top: 2.5rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: cardIn 0.4s ease forwards;
+      animation-delay: 0.25s;
+    }
+
     .endpoint {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+
+    .endpoint-row {
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 6px;
@@ -224,16 +225,10 @@
       transition: color 0.2s, border-color 0.2s;
       white-space: nowrap;
     }
-    .copy-btn:hover {
-      color: var(--yellow);
-      border-color: var(--yellow-mid);
-    }
-    .copy-btn.copied {
-      color: #22c55e;
-      border-color: #22c55e40;
-    }
+    .copy-btn:hover { color: var(--yellow); border-color: var(--yellow-mid); }
+    .copy-btn.copied { color: #22c55e; border-color: #22c55e40; }
 
-    /* setup section */
+    /* setup */
     .setup {
       margin-top: 2.5rem;
       padding: 1.5rem;
@@ -283,13 +278,8 @@
     .code-block .str { color: #88C8FF; }
     .code-block .brace { color: var(--text-dim); }
 
-    .code-copy {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-    }
+    .code-copy { position: absolute; top: 0.5rem; right: 0.5rem; }
 
-    /* footer */
     footer {
       margin-top: 3rem;
       padding-top: 1.25rem;
@@ -302,10 +292,12 @@
       color: var(--text-dim);
     }
 
+    code { font-family: var(--mono); font-size: 0.8em; color: var(--yellow); }
+
     @media (max-width: 580px) {
       .page { padding: 2rem 1rem 3rem; }
       .brand h1 { font-size: 1.25rem; }
-      .endpoint { flex-direction: column; align-items: stretch; }
+      .endpoint-row { flex-direction: column; align-items: stretch; }
       .copy-btn { align-self: flex-end; }
     }
   </style>
@@ -317,26 +309,21 @@
     <header>
       <div class="brand">
         <div class="brand-stripe"></div>
-        <h1><span>MCP</span> Servers</h1>
+        <h1><span>Mystic</span> Forge</h1>
       </div>
       <p class="subtitle">
-        Model Context Protocol servers hosted at <strong>mcp.kautiontape.com</strong>.
-        Connect them to Claude Desktop or any MCP-compatible client to get Magic: The Gathering data at your fingertips.
+        A unified MCP server for Magic: The Gathering. Card search, pricing, commander recommendations, deck reading, and validation — all in one place. Connect via Claude Desktop or any MCP-compatible client.
       </p>
     </header>
 
-    <div class="servers">
-      <!-- Scryfall -->
-      <div class="server">
-        <div class="server-header">
-          <span class="server-icon">&#127183;</span>
-          <span class="server-name">Scryfall</span>
+    <div class="section-label">Tool Groups</div>
+    <div class="tool-groups">
+      <div class="tool-group">
+        <div class="group-header">
+          <span class="group-icon">&#127183;</span>
+          <span class="group-name">Scryfall</span>
         </div>
-        <div class="server-desc">
-          Search Magic: The Gathering cards, look up pricing, find cards by name, and get random cards.
-          Powered by the Scryfall API.
-        </div>
-        <div class="tools-label">Available tools</div>
+        <div class="group-desc">Search cards, look up pricing across printings, find by name, or get a random card.</div>
         <div class="tools">
           <span class="tool-tag">scryfall_search</span>
           <span class="tool-tag">scryfall_named</span>
@@ -344,26 +331,14 @@
           <span class="tool-tag">scryfall_price_list</span>
           <span class="tool-tag">scryfall_random</span>
         </div>
-        <div class="endpoint">
-          <div>
-            <div class="endpoint-label">SSE Endpoint</div>
-            <div class="endpoint-url">https://mcp.kautiontape.com/scryfall/sse</div>
-          </div>
-          <button class="copy-btn" onclick="copyUrl(this, 'https://mcp.kautiontape.com/scryfall/sse')">copy</button>
-        </div>
       </div>
 
-      <!-- EDHRec -->
-      <div class="server">
-        <div class="server-header">
-          <span class="server-icon">&#9876;&#65039;</span>
-          <span class="server-name">EDHRec</span>
+      <div class="tool-group">
+        <div class="group-header">
+          <span class="group-icon">&#9876;&#65039;</span>
+          <span class="group-name">EDHRec</span>
         </div>
-        <div class="server-desc">
-          Commander deck recommendations, top cards by theme or color, combo lookups,
-          average decklists, and community salt scores.
-        </div>
-        <div class="tools-label">Available tools</div>
+        <div class="group-desc">Commander deck recommendations, top cards by theme or color, combo lookups, average decklists, and community salt scores.</div>
         <div class="tools">
           <span class="tool-tag">edhrec_commander</span>
           <span class="tool-tag">edhrec_recommendations</span>
@@ -372,39 +347,65 @@
           <span class="tool-tag">edhrec_average_deck</span>
           <span class="tool-tag">edhrec_salt</span>
         </div>
-        <div class="endpoint">
-          <div>
-            <div class="endpoint-label">SSE Endpoint</div>
-            <div class="endpoint-url">https://mcp.kautiontape.com/edhrec/sse</div>
-          </div>
-          <button class="copy-btn" onclick="copyUrl(this, 'https://mcp.kautiontape.com/edhrec/sse')">copy</button>
+      </div>
+
+      <div class="tool-group">
+        <div class="group-header">
+          <span class="group-icon">&#128218;</span>
+          <span class="group-name">Archidekt</span>
+        </div>
+        <div class="group-desc">Fetch public decks, browse a user's decklists, or export decks as importable card lists.</div>
+        <div class="tools">
+          <span class="tool-tag">archidekt_deck</span>
+          <span class="tool-tag">archidekt_user_decks</span>
+          <span class="tool-tag">archidekt_export</span>
+        </div>
+      </div>
+
+      <div class="tool-group">
+        <div class="group-header">
+          <span class="group-icon">&#9989;</span>
+          <span class="group-name">Validation</span>
+        </div>
+        <div class="group-desc">Verify card names, deck size, color identity, and validate full Archidekt decks including categories.</div>
+        <div class="tools">
+          <span class="tool-tag">validate_decklist</span>
+          <span class="tool-tag">validate_archidekt_deck</span>
         </div>
       </div>
     </div>
 
-    <!-- Setup -->
+    <div class="endpoint-section">
+      <div class="section-label">Connection</div>
+      <div class="endpoint">
+        <div class="endpoint-row">
+          <div>
+            <div class="endpoint-label">MCP Endpoint</div>
+            <div class="endpoint-url">https://mcp.kautiontape.com/mcp</div>
+          </div>
+          <button class="copy-btn" onclick="copyUrl(this, 'https://mcp.kautiontape.com/mcp')">copy</button>
+        </div>
+      </div>
+    </div>
+
     <div class="setup">
       <h2>Quick Setup</h2>
       <p>
-        Add these to your Claude Desktop config
-        (<code style="font-family:var(--mono);font-size:0.8em;color:var(--yellow)">claude_desktop_config.json</code>)
-        under <code style="font-family:var(--mono);font-size:0.8em;color:var(--yellow)">mcpServers</code>:
+        Add to your Claude Desktop config (<code>claude_desktop_config.json</code>)
+        under <code>mcpServers</code>:
       </p>
       <div class="code-block">
         <button class="copy-btn code-copy" onclick="copyConfig(this)">copy</button>
         <pre><span class="brace">{</span>
   <span class="key">"mcpServers"</span><span class="brace">:</span> <span class="brace">{</span>
-    <span class="key">"scryfall"</span><span class="brace">:</span> <span class="brace">{</span>
-      <span class="key">"url"</span><span class="brace">:</span> <span class="str">"https://mcp.kautiontape.com/scryfall/sse"</span>
-    <span class="brace">},</span>
-    <span class="key">"edhrec"</span><span class="brace">:</span> <span class="brace">{</span>
-      <span class="key">"url"</span><span class="brace">:</span> <span class="str">"https://mcp.kautiontape.com/edhrec/sse"</span>
+    <span class="key">"mystic-forge"</span><span class="brace">:</span> <span class="brace">{</span>
+      <span class="key">"url"</span><span class="brace">:</span> <span class="str">"https://mcp.kautiontape.com/mcp"</span>
     <span class="brace">}</span>
   <span class="brace">}</span>
 <span class="brace">}</span></pre>
       </div>
       <p>
-        No authentication required. These are public, read-only servers.
+        No authentication required. All 16 tools are available through a single connection.
       </p>
     </div>
 
@@ -418,27 +419,20 @@
       navigator.clipboard.writeText(url).then(() => {
         btn.textContent = 'copied';
         btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = 'copy';
-          btn.classList.remove('copied');
-        }, 2000);
+        setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
       });
     }
 
     function copyConfig(btn) {
       const config = JSON.stringify({
         mcpServers: {
-          scryfall: { url: "https://mcp.kautiontape.com/scryfall/sse" },
-          edhrec: { url: "https://mcp.kautiontape.com/edhrec/sse" }
+          "mystic-forge": { url: "https://mcp.kautiontape.com/mcp" }
         }
       }, null, 2);
       navigator.clipboard.writeText(config).then(() => {
         btn.textContent = 'copied';
         btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = 'copy';
-          btn.classList.remove('copied');
-        }, 2000);
+        setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
       });
     }
   </script>
