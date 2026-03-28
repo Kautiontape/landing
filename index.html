@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>kautiontape</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+    :root {
+      --yellow: #FFD000;
+      --yellow-dim: #FFD00018;
+      --yellow-mid: #FFD00040;
+      --bg: #0C0C0E;
+      --bg-card: #141417;
+      --bg-card-hover: #1A1A1F;
+      --border: #2A2A30;
+      --border-hover: #3A3A42;
+      --text: #E8E8EC;
+      --text-dim: #8888A0;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* subtle noise texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    /* header */
+    header {
+      margin-bottom: 3rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .brand-stripe {
+      width: 4px;
+      height: 2.25rem;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--yellow),
+        var(--yellow) 3px,
+        var(--bg) 3px,
+        var(--bg) 6px
+      );
+      border-radius: 2px;
+    }
+
+    .brand h1 {
+      font-family: var(--mono);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .brand h1 span {
+      color: var(--yellow);
+    }
+
+    .tagline {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+      padding-left: 1.25rem;
+    }
+
+    /* grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    /* cards */
+    .card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 1.25rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text);
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .card:hover .card-icon {
+      transform: scale(1.1);
+    }
+
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+      transition: transform 0.2s;
+    }
+
+    .card-arrow {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--yellow);
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .card-name {
+      font-family: var(--mono);
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    .card-url {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--yellow);
+      opacity: 0.6;
+      margin-top: auto;
+      padding-top: 0.25rem;
+    }
+
+    /* accent stripe on card hover */
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--yellow);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover::after {
+      transform: scaleX(1);
+    }
+
+    /* footer */
+    footer {
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    footer p {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    .footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      display: inline-block;
+      margin-right: 0.35rem;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* load animation */
+    .card {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: cardIn 0.4s ease forwards;
+    }
+    .card:nth-child(1) { animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.1s; }
+    .card:nth-child(3) { animation-delay: 0.15s; }
+    .card:nth-child(4) { animation-delay: 0.2s; }
+    .card:nth-child(5) { animation-delay: 0.25s; }
+    .card:nth-child(6) { animation-delay: 0.3s; }
+    .card:nth-child(7) { animation-delay: 0.35s; }
+
+    @keyframes cardIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 580px) {
+      .page { padding: 2rem 1rem 3rem; }
+      .grid { grid-template-columns: 1fr; }
+      .brand h1 { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-stripe"></div>
+        <h1><span>kaution</span>tape</h1>
+      </div>
+      <p class="tagline">self-hosted tools &amp; services</p>
+    </header>
+
+    <div class="grid">
+      <a href="https://shorts.kautiontape.com" class="card">
+        <div class="card-top">
+          <span class="card-icon">&#127916;</span>
+          <span class="card-arrow">&rarr;</span>
+        </div>
+        <div class="card-name">Shorts Prep</div>
+        <div class="card-desc">Video editing prep tool for short-form content</div>
+        <div class="card-url">shorts.kautiontape.com</div>
+      </a>
+
+      <a href="https://5e.kautiontape.com" class="card">
+        <div class="card-top">
+          <span class="card-icon">&#127922;</span>
+          <span class="card-arrow">&rarr;</span>
+        </div>
+        <div class="card-name">5etools</div>
+        <div class="card-desc">D&amp;D 5th Edition reference and tools</div>
+        <div class="card-url">5e.kautiontape.com</div>
+      </a>
+
+      <a href="https://pdf.kautiontape.com" class="card">
+        <div class="card-top">
+          <span class="card-icon">&#128196;</span>
+          <span class="card-arrow">&rarr;</span>
+        </div>
+        <div class="card-name">BentoPDF</div>
+        <div class="card-desc">PDF generation and conversion tool</div>
+        <div class="card-url">pdf.kautiontape.com</div>
+      </a>
+
+      <a href="https://chef.kautiontape.com" class="card">
+        <div class="card-top">
+          <span class="card-icon">&#128272;</span>
+          <span class="card-arrow">&rarr;</span>
+        </div>
+        <div class="card-name">CyberChef</div>
+        <div class="card-desc">Encoding, encryption, and data transformation toolkit</div>
+        <div class="card-url">chef.kautiontape.com</div>
+      </a>
+
+      <a href="https://bin.kautiontape.com" class="card">
+        <div class="card-top">
+          <span class="card-icon">&#128203;</span>
+          <span class="card-arrow">&rarr;</span>
+        </div>
+        <div class="card-name">PrivateBin</div>
+        <div class="card-desc">Self-hosted encrypted pastebin</div>
+        <div class="card-url">bin.kautiontape.com</div>
+      </a>
+
+      <a href="https://relish.kautiontape.com" class="card">
+        <div class="card-top">
+          <span class="card-icon">&#128128;</span>
+          <span class="card-arrow">&rarr;</span>
+        </div>
+        <div class="card-name">Relish</div>
+        <div class="card-desc">Idle necromancer game prototype</div>
+        <div class="card-url">relish.kautiontape.com</div>
+      </a>
+
+      <a href="mcp/" class="card">
+        <div class="card-top">
+          <span class="card-icon">&#129302;</span>
+          <span class="card-arrow">&rarr;</span>
+        </div>
+        <div class="card-name">MCP Servers</div>
+        <div class="card-desc">Model Context Protocol servers for Magic: The Gathering</div>
+        <div class="card-url">mcp.kautiontape.com</div>
+      </a>
+    </div>
+
+    <footer>
+      <p><span class="footer-dot"></span>self-hosted on digitalocean</p>
+      <p>kautiontape.com</p>
+    </footer>
+  </div>
+</body>
+</html>

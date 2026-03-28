@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP Servers — kautiontape</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+    :root {
+      --yellow: #FFD000;
+      --yellow-dim: #FFD00018;
+      --yellow-mid: #FFD00040;
+      --bg: #0C0C0E;
+      --bg-card: #141417;
+      --bg-card-hover: #1A1A1F;
+      --border: #2A2A30;
+      --border-hover: #3A3A42;
+      --text: #E8E8EC;
+      --text-dim: #8888A0;
+      --text-mid: #AAAAB8;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    /* back link */
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      margin-bottom: 2rem;
+      transition: color 0.2s;
+    }
+    .back:hover { color: var(--yellow); }
+
+    /* header */
+    header {
+      margin-bottom: 2.5rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .brand-stripe {
+      width: 4px;
+      height: 2.25rem;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--yellow),
+        var(--yellow) 3px,
+        var(--bg) 3px,
+        var(--bg) 6px
+      );
+      border-radius: 2px;
+    }
+
+    .brand h1 {
+      font-family: var(--mono);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand h1 span { color: var(--yellow); }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      max-width: 600px;
+      padding-left: 1.25rem;
+    }
+
+    /* server cards */
+    .servers {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .server {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: cardIn 0.4s ease forwards;
+    }
+    .server:nth-child(1) { animation-delay: 0.1s; }
+    .server:nth-child(2) { animation-delay: 0.2s; }
+
+    @keyframes cardIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .server-header {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .server-icon {
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+
+    .server-name {
+      font-family: var(--mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .server-desc {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    /* tools list */
+    .tools-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .tool-tag {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      padding: 0.3rem 0.6rem;
+      background: var(--yellow-dim);
+      color: var(--text-mid);
+      border: 1px solid var(--yellow-mid);
+      border-radius: 4px;
+    }
+
+    /* endpoint box */
+    .endpoint {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .endpoint-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      margin-bottom: 0.2rem;
+    }
+
+    .endpoint-url {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--yellow);
+      word-break: break-all;
+    }
+
+    .copy-btn {
+      flex-shrink: 0;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: var(--text-dim);
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      padding: 0.4rem 0.65rem;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .copy-btn:hover {
+      color: var(--yellow);
+      border-color: var(--yellow-mid);
+    }
+    .copy-btn.copied {
+      color: #22c55e;
+      border-color: #22c55e40;
+    }
+
+    /* setup section */
+    .setup {
+      margin-top: 2.5rem;
+      padding: 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: cardIn 0.4s ease forwards;
+      animation-delay: 0.3s;
+    }
+
+    .setup h2 {
+      font-family: var(--mono);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .setup p {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .setup p:last-child { margin-bottom: 0; }
+
+    .code-block {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .code-block pre {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      line-height: 1.7;
+      color: var(--text-mid);
+    }
+
+    .code-block .key { color: var(--yellow); }
+    .code-block .str { color: #88C8FF; }
+    .code-block .brace { color: var(--text-dim); }
+
+    .code-copy {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+
+    /* footer */
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    footer p {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 580px) {
+      .page { padding: 2rem 1rem 3rem; }
+      .brand h1 { font-size: 1.25rem; }
+      .endpoint { flex-direction: column; align-items: stretch; }
+      .copy-btn { align-self: flex-end; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <a href="../" class="back">&larr; back to kautiontape.com</a>
+
+    <header>
+      <div class="brand">
+        <div class="brand-stripe"></div>
+        <h1><span>MCP</span> Servers</h1>
+      </div>
+      <p class="subtitle">
+        Model Context Protocol servers hosted at <strong>mcp.kautiontape.com</strong>.
+        Connect them to Claude Desktop or any MCP-compatible client to get Magic: The Gathering data at your fingertips.
+      </p>
+    </header>
+
+    <div class="servers">
+      <!-- Scryfall -->
+      <div class="server">
+        <div class="server-header">
+          <span class="server-icon">&#127183;</span>
+          <span class="server-name">Scryfall</span>
+        </div>
+        <div class="server-desc">
+          Search Magic: The Gathering cards, look up pricing, find cards by name, and get random cards.
+          Powered by the Scryfall API.
+        </div>
+        <div class="tools-label">Available tools</div>
+        <div class="tools">
+          <span class="tool-tag">scryfall_search</span>
+          <span class="tool-tag">scryfall_named</span>
+          <span class="tool-tag">scryfall_price</span>
+          <span class="tool-tag">scryfall_price_list</span>
+          <span class="tool-tag">scryfall_random</span>
+        </div>
+        <div class="endpoint">
+          <div>
+            <div class="endpoint-label">SSE Endpoint</div>
+            <div class="endpoint-url">https://mcp.kautiontape.com/scryfall/sse</div>
+          </div>
+          <button class="copy-btn" onclick="copyUrl(this, 'https://mcp.kautiontape.com/scryfall/sse')">copy</button>
+        </div>
+      </div>
+
+      <!-- EDHRec -->
+      <div class="server">
+        <div class="server-header">
+          <span class="server-icon">&#9876;&#65039;</span>
+          <span class="server-name">EDHRec</span>
+        </div>
+        <div class="server-desc">
+          Commander deck recommendations, top cards by theme or color, combo lookups,
+          average decklists, and community salt scores.
+        </div>
+        <div class="tools-label">Available tools</div>
+        <div class="tools">
+          <span class="tool-tag">edhrec_commander</span>
+          <span class="tool-tag">edhrec_recommendations</span>
+          <span class="tool-tag">edhrec_top_cards</span>
+          <span class="tool-tag">edhrec_combos</span>
+          <span class="tool-tag">edhrec_average_deck</span>
+          <span class="tool-tag">edhrec_salt</span>
+        </div>
+        <div class="endpoint">
+          <div>
+            <div class="endpoint-label">SSE Endpoint</div>
+            <div class="endpoint-url">https://mcp.kautiontape.com/edhrec/sse</div>
+          </div>
+          <button class="copy-btn" onclick="copyUrl(this, 'https://mcp.kautiontape.com/edhrec/sse')">copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Setup -->
+    <div class="setup">
+      <h2>Quick Setup</h2>
+      <p>
+        Add these to your Claude Desktop config
+        (<code style="font-family:var(--mono);font-size:0.8em;color:var(--yellow)">claude_desktop_config.json</code>)
+        under <code style="font-family:var(--mono);font-size:0.8em;color:var(--yellow)">mcpServers</code>:
+      </p>
+      <div class="code-block">
+        <button class="copy-btn code-copy" onclick="copyConfig(this)">copy</button>
+        <pre><span class="brace">{</span>
+  <span class="key">"mcpServers"</span><span class="brace">:</span> <span class="brace">{</span>
+    <span class="key">"scryfall"</span><span class="brace">:</span> <span class="brace">{</span>
+      <span class="key">"url"</span><span class="brace">:</span> <span class="str">"https://mcp.kautiontape.com/scryfall/sse"</span>
+    <span class="brace">},</span>
+    <span class="key">"edhrec"</span><span class="brace">:</span> <span class="brace">{</span>
+      <span class="key">"url"</span><span class="brace">:</span> <span class="str">"https://mcp.kautiontape.com/edhrec/sse"</span>
+    <span class="brace">}</span>
+  <span class="brace">}</span>
+<span class="brace">}</span></pre>
+      </div>
+      <p>
+        No authentication required. These are public, read-only servers.
+      </p>
+    </div>
+
+    <footer>
+      <p>kautiontape.com &middot; self-hosted MCP infrastructure</p>
+    </footer>
+  </div>
+
+  <script>
+    function copyUrl(btn, url) {
+      navigator.clipboard.writeText(url).then(() => {
+        btn.textContent = 'copied';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    function copyConfig(btn) {
+      const config = JSON.stringify({
+        mcpServers: {
+          scryfall: { url: "https://mcp.kautiontape.com/scryfall/sse" },
+          edhrec: { url: "https://mcp.kautiontape.com/edhrec/sse" }
+        }
+      }, null, 2);
+      navigator.clipboard.writeText(config).then(() => {
+        btn.textContent = 'copied';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
