@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pelican Town Planting Almanac — Pasadena, MD</title>
+<meta name="description" content="A year-round Maryland planting calendar for Anne Arundel County, zone 7b.">
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --wood-dark:#2E1E10;
+  --wood:#5C3D22;
+  --wood-lt:#7A5330;
+  --panel:#F5E2B3;
+  --panel-2:#E6CD93;
+  --panel-3:#D8B876;
+  --ink:#4A2E19;
+  --ink-soft:#7A5735;
+  --gold:#F2C438;
+  --spring:#7FBF4F;
+  --summer:#F2C438;
+  --fall:#E07B39;
+  --winter:#8FC7E8;
+  --sow:#5FA83E;
+  --indoor:#9B7BD4;
+  --transplant:#E8933A;
+  --plantb:#B5763C;
+  --pixel:'Press Start 2P',monospace;
+  --body:'VT323',monospace;
+}
+
+html{-webkit-text-size-adjust:100%}
+
+body{
+  background:
+    repeating-linear-gradient(90deg,
+      rgba(0,0,0,.16) 0 2px, rgba(0,0,0,0) 2px 42px),
+    repeating-linear-gradient(0deg,
+      rgba(255,255,255,.035) 0 3px, rgba(0,0,0,.05) 3px 7px),
+    linear-gradient(180deg,#6B4728,#4A2F1A);
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:20px;
+  line-height:1.35;
+  min-height:100vh;
+  padding:1.25rem .75rem 3rem;
+}
+
+.wrap{max-width:1180px;margin:0 auto}
+
+/* ---------- Stardew-style chunky panel ---------- */
+.panel{
+  background:var(--panel);
+  border:4px solid var(--ink);
+  box-shadow:
+    inset 0 0 0 4px var(--panel-2),
+    inset 0 0 0 8px var(--panel),
+    0 0 0 4px #8B5A2B,
+    0 8px 0 4px rgba(0,0,0,.35);
+  padding:1.35rem 1.25rem;
+  margin-bottom:1.5rem;
+}
+
+h1,h2,h3,.pix{font-family:var(--pixel);font-weight:400;line-height:1.5;letter-spacing:0}
+
+h1{font-size:clamp(.8rem,3.2vw,1.35rem);color:var(--ink);text-shadow:2px 2px 0 var(--panel-3)}
+h2{font-size:clamp(.62rem,2.1vw,.82rem);margin-bottom:.85rem;color:var(--ink);
+   text-shadow:1px 1px 0 var(--panel-3)}
+h3{font-size:.7rem;margin-bottom:.5rem}
+
+.sub{font-size:1.05rem;color:var(--ink-soft);margin-top:.6rem}
+
+/* header */
+.hdr{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.hdr .crest{font-size:2.4rem;line-height:1}
+.badges{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.75rem}
+.badge{
+  font-family:var(--pixel);font-size:.5rem;padding:.45rem .55rem;
+  background:var(--wood);color:#FFE9BE;border:3px solid var(--ink);
+  box-shadow:inset 0 0 0 2px var(--wood-lt);
+}
+
+/* ---------- now panel ---------- */
+.now-head{display:flex;align-items:baseline;gap:.75rem;flex-wrap:wrap;margin-bottom:.75rem}
+.now-date{font-family:var(--pixel);font-size:.6rem;color:#fff;background:var(--fall);
+  border:3px solid var(--ink);padding:.4rem .5rem}
+.now-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.5rem}
+.now-chip{
+  display:flex;align-items:center;gap:.45rem;
+  background:var(--panel-2);border:3px solid var(--ink);
+  padding:.4rem .5rem;cursor:pointer;font-size:1.05rem;
+  transition:transform .08s,background .12s;text-align:left;width:100%;
+  font-family:var(--body);color:var(--ink);
+}
+.now-chip:hover{background:#fff3d0;transform:translate(-2px,-2px);
+  box-shadow:3px 3px 0 rgba(0,0,0,.35)}
+.now-chip .ic{font-size:1.3rem}
+.now-note{margin-top:.85rem;font-size:1.05rem;border-top:3px dashed var(--panel-3);padding-top:.7rem}
+
+/* ---------- controls ---------- */
+.controls{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+.btn{
+  font-family:var(--pixel);font-size:.5rem;padding:.5rem .6rem;cursor:pointer;
+  background:var(--panel-2);color:var(--ink);border:3px solid var(--ink);
+  box-shadow:2px 2px 0 rgba(0,0,0,.3);
+}
+.btn:hover{background:#fff3d0}
+.btn[aria-pressed="true"]{background:var(--wood);color:#FFE9BE;box-shadow:inset 2px 2px 0 rgba(0,0,0,.35)}
+
+/* ---------- legend ---------- */
+.legend{display:flex;gap:.9rem;flex-wrap:wrap;margin-top:.9rem;font-size:1rem}
+.legend span{display:flex;align-items:center;gap:.35rem}
+.sw{width:22px;height:13px;border:2px solid var(--ink);display:inline-block}
+
+/* ---------- chart ---------- */
+.chart-scroll{overflow-x:auto;overflow-y:visible;padding-bottom:.5rem}
+.chart{min-width:760px}
+
+.row{display:flex;align-items:stretch;border-bottom:2px solid rgba(74,46,25,.18)}
+.row:last-child{border-bottom:0}
+
+.lbl{
+  flex:0 0 168px;display:flex;align-items:center;gap:.4rem;
+  padding:.3rem .5rem;font-size:1.08rem;cursor:pointer;background:transparent;
+  border:0;border-right:3px solid var(--ink);font-family:var(--body);
+  color:var(--ink);text-align:left;
+}
+.lbl:hover{background:#fff3d0}
+.lbl .ic{font-size:1.2rem;flex:0 0 auto}
+.lbl .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.track{position:relative;flex:1;min-height:30px;
+  background-image:repeating-linear-gradient(90deg,
+    rgba(74,46,25,.16) 0 2px, rgba(0,0,0,0) 2px calc(100%/12));
+  background-size:calc(100%/12) 100%;
+}
+
+/* season tint band behind everything */
+.seasons{position:absolute;inset:0;display:flex;pointer-events:none;z-index:0}
+.seasons i{display:block;height:100%}
+.s-win{background:rgba(143,199,232,.20)}
+.s-spr{background:rgba(127,191,79,.20)}
+.s-sum{background:rgba(242,196,56,.20)}
+.s-fal{background:rgba(224,123,57,.20)}
+
+.bar{
+  position:absolute;top:50%;transform:translateY(-50%);
+  height:15px;border:2px solid var(--ink);z-index:2;
+  box-shadow:1px 1px 0 rgba(0,0,0,.28);
+}
+.b-sow{background:var(--sow)}
+.b-indoor{background:var(--indoor)}
+.b-transplant{background:var(--transplant)}
+.b-plant{background:var(--plantb)}
+
+/* month header */
+.months{display:flex;position:sticky;top:0;z-index:6;background:var(--panel)}
+.months .lbl-sp{flex:0 0 168px;border-right:3px solid var(--ink)}
+.months .mrow{flex:1;display:flex;position:relative}
+.months .m{
+  flex:1;text-align:center;font-family:var(--pixel);font-size:.45rem;
+  padding:.45rem 0;border-left:2px solid rgba(74,46,25,.25);color:var(--ink);
+}
+.months .m:first-child{border-left:0}
+.m.is-now{background:var(--gold);box-shadow:inset 0 -3px 0 var(--ink)}
+
+/* season strip above months */
+.seasonbar{display:flex}
+.seasonbar .lbl-sp{flex:0 0 168px}
+.seasonbar .sb{flex:1;display:flex}
+.seasonbar .sb i{
+  font-family:var(--pixel);font-size:.45rem;text-align:center;padding:.4rem 0;
+  border:3px solid var(--ink);border-bottom:0;font-style:normal;color:var(--ink);
+}
+.sb .win{background:var(--winter)}
+.sb .spr{background:var(--spring)}
+.sb .sum{background:var(--summer)}
+.sb .fal{background:var(--fall)}
+
+/* now line */
+.nowline{position:absolute;top:0;bottom:0;width:0;border-left:3px dashed #C0392B;z-index:5;pointer-events:none}
+.months .nowline::before{
+  content:'NOW';position:absolute;top:-2px;left:-16px;font-family:var(--pixel);
+  font-size:.4rem;background:#C0392B;color:#fff;padding:2px 3px;border:2px solid var(--ink);
+  z-index:7;
+}
+
+.catgroup{margin-top:1.1rem}
+.cathead{
+  font-family:var(--pixel);font-size:.55rem;padding:.45rem .5rem;
+  background:var(--wood);color:#FFE9BE;border:3px solid var(--ink);
+  display:flex;align-items:center;gap:.5rem;
+}
+.catbody{border:3px solid var(--ink);border-top:0;background:rgba(255,255,255,.30)}
+
+/* ---------- modal ---------- */
+.scrim{
+  position:fixed;inset:0;background:rgba(20,10,4,.72);
+  display:none;align-items:center;justify-content:center;padding:1rem;z-index:100;
+}
+.scrim.open{display:flex}
+.modal{
+  background:var(--panel);border:4px solid var(--ink);
+  box-shadow:inset 0 0 0 4px var(--panel-2),inset 0 0 0 8px var(--panel),
+    0 0 0 4px #8B5A2B,0 10px 0 4px rgba(0,0,0,.45);
+  max-width:600px;width:100%;max-height:86vh;overflow-y:auto;padding:1.4rem 1.3rem;
+}
+.mhead{display:flex;align-items:center;gap:.7rem;margin-bottom:.35rem}
+.mhead .ic{font-size:2.4rem}
+.mhead h3{font-size:.85rem;margin:0}
+.mcat{font-family:var(--pixel);font-size:.45rem;background:var(--wood);color:#FFE9BE;
+  padding:.3rem .4rem;border:2px solid var(--ink);display:inline-block;margin-bottom:.9rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.5rem;margin-bottom:1rem}
+.stat{background:var(--panel-2);border:3px solid var(--ink);padding:.45rem .5rem}
+.stat b{display:block;font-family:var(--pixel);font-size:.42rem;color:var(--ink-soft);margin-bottom:.3rem}
+.stat span{font-size:1.05rem}
+.mwin{margin-bottom:.9rem}
+.mwin div{display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem;font-size:1.05rem}
+.mnote{background:#FFF6DC;border-left:6px solid var(--fall);padding:.6rem .7rem;font-size:1.06rem;margin-bottom:.7rem}
+.mlocal{background:#EAF3E0;border-left:6px solid var(--sow);padding:.6rem .7rem;font-size:1.06rem}
+.mclose{margin-top:1.1rem;width:100%}
+
+/* almanac */
+.alm{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.7rem}
+.alm .card{background:var(--panel-2);border:3px solid var(--ink);padding:.7rem}
+.alm .card b{display:block;font-family:var(--pixel);font-size:.48rem;margin-bottom:.45rem}
+.alm .card p{font-size:1.05rem}
+.src{font-size:.95rem;color:var(--ink-soft);margin-top:.9rem;border-top:3px dashed var(--panel-3);padding-top:.7rem}
+.src a{color:#7A4A17}
+
+footer{text-align:center;font-family:var(--pixel);font-size:.5rem;color:#E8CE94;
+  text-shadow:2px 2px 0 rgba(0,0,0,.5);padding:.5rem}
+footer a{color:var(--gold)}
+
+@media (max-width:640px){
+  body{font-size:19px;padding:.75rem .5rem 2rem}
+  .panel{padding:1rem .8rem}
+  .lbl,.months .lbl-sp,.seasonbar .lbl-sp{flex-basis:118px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="panel">
+    <div class="hdr">
+      <span class="crest">🌱</span>
+      <div>
+        <h1>Planting Almanac</h1>
+        <div class="sub">A year-round growing calendar for <strong>Pasadena, Maryland</strong> — Anne Arundel County.</div>
+      </div>
+    </div>
+    <div class="badges">
+      <span class="badge">USDA 7b</span>
+      <span class="badge">39.11°N</span>
+      <span class="badge">Anne Arundel</span>
+      <span class="badge">Chesapeake-moderated</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="now-head">
+      <h2 style="margin:0">☀ What you can plant right now</h2>
+      <span class="now-date" id="nowDate">—</span>
+    </div>
+    <div class="now-grid" id="nowGrid"></div>
+    <div class="now-note" id="nowNote"></div>
+  </div>
+
+  <div class="panel">
+    <h2>📖 The Calendar</h2>
+    <div class="controls" id="filters"></div>
+    <div class="legend">
+      <span><i class="sw b-indoor"></i> Start indoors</span>
+      <span><i class="sw b-sow"></i> Direct sow outside</span>
+      <span><i class="sw b-transplant"></i> Set out transplants</span>
+      <span><i class="sw b-plant"></i> Plant bulbs / crowns / slips</span>
+    </div>
+    <p style="margin-top:.7rem;font-size:1.02rem;color:var(--ink-soft)">
+      Tap any crop for spacing, depth, days to maturity and local notes.
+    </p>
+
+    <div class="chart-scroll">
+      <div class="chart">
+        <div class="seasonbar">
+          <div class="lbl-sp"></div>
+          <div class="sb">
+            <i class="win" style="flex:2">WINTER</i>
+            <i class="spr" style="flex:3">SPRING</i>
+            <i class="sum" style="flex:3">SUMMER</i>
+            <i class="fal" style="flex:3">FALL</i>
+            <i class="win" style="flex:1">WIN</i>
+          </div>
+        </div>
+        <div class="months" id="monthHead"></div>
+        <div id="chart"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>🗺 Local Almanac — why this differs from a national chart</h2>
+    <div class="alm">
+      <div class="card">
+        <b>Last spring frost</b>
+        <p>~<strong>April 15</strong> (UMD, central Maryland). Nothing tender goes out before this.</p>
+      </div>
+      <div class="card">
+        <b>First fall frost</b>
+        <p>UMD's statewide default is <strong>Oct 31</strong>. But NOAA 1991–2020 normals put the median first 32°F at <strong>Nov 13</strong> at the Annapolis waterfront station versus <strong>Oct 29</strong> at BWI. Pasadena sits on Bodkin Neck between the Patapsco and the Bay, so it behaves like the waterfront station, not the airport.</p>
+      </div>
+      <div class="card">
+        <b>The 10-hour wall</b>
+        <p>Growth nearly stops below ~10 hours of daylight. At 39.11°N that runs <strong>Nov 17 → Jan 26</strong>. Widely-quoted "early November" dates come from Johnny's farm in <em>Maine</em>, 5° further north — don't use them here.</p>
+      </div>
+      <div class="card">
+        <b>Fall short-day factor</b>
+        <p>UMD says add <strong>10–14 days</strong> to any seed-packet "days to maturity" for a fall planting. A 25-day radish is really 35–39 days in September.</p>
+      </div>
+    </div>
+    <div class="src">
+      Planting windows from <a href="https://extension.umd.edu/resource/vegetable-planting-calendar">UMD Extension's vegetable planting calendar</a>
+      and <a href="https://extension.umd.edu/resource/bulbs">bulbs</a> / <a href="https://extension.umd.edu/resource/herbs-home-garden">herbs</a> guidance.
+      Frost normals from NOAA NCEI. Day length computed from NOAA solar equations for 39.11°N.
+      Dates are for <em>central Maryland</em> and shift a few days earlier inland, later toward the water.
+    </div>
+  </div>
+
+  <footer>
+    <a href="/">← kautiontape.com</a>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="mhead"><span class="ic" id="mIcon">🌱</span><h3 id="mTitle">—</h3></div>
+    <span class="mcat" id="mCat">—</span>
+    <div class="stats" id="mStats"></div>
+    <h3 style="font-size:.6rem;margin-bottom:.5rem">When to plant</h3>
+    <div class="mwin" id="mWin"></div>
+    <div class="mnote" id="mNote"></div>
+    <div class="mlocal" id="mLocal"></div>
+    <button class="btn mclose" id="mClose">CLOSE</button>
+  </div>
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   Windows use month-decimals: 3.0 = Mar 1, 3.5 = mid-March, 4.0 = Apr 1
+   Types: indoor | sow | transplant | plant
+   Sources: UMD Extension vegetable planting calendar (central MD).
+-------------------------------------------------------------------*/
+const CATS = [
+  ['greens','Leafy Greens','🥬'],
+  ['brassica','Brassicas','🥦'],
+  ['root','Roots &amp; Tubers','🥕'],
+  ['legume','Legumes','🫛'],
+  ['night','Nightshades','🍅'],
+  ['curcurb','Cucurbits','🎃'],
+  ['allium','Alliums','🧅'],
+  ['herb','Herbs','🌿'],
+  ['fruit','Fruit &amp; Perennials','🍓'],
+  ['flower','Flowers &amp; Bulbs','🌷'],
+];
+
+const W = (t,a,b) => ({t,a,b});
+
+const CROPS = [
+/* ---- LEAFY GREENS ---- */
+{n:'Lettuce, leaf',i:'🥬',c:'greens',w:[W('sow',3.5,6),W('sow',7.5,9)],
+ dtm:'45–55 days',sun:'Full sun / part shade',depth:'¼ in — needs light',space:'4–6 in',hardy:'Semi-hardy',cont:'Excellent',
+ harvest:'Cut outer leaves at 4 in and it regrows for weeks. UMD harvest runs into November.',
+ note:'The single most forgiving crop on this chart. Broadcast it, thin by eating.',
+ local:'A fall sowing beats a spring one here — spring lettuce bolts the moment Maryland turns hot in June.'},
+
+{n:'Lettuce, head',i:'🥗',c:'greens',w:[W('indoor',3,4),W('transplant',4,5),W('indoor',7,7.5),W('transplant',8,8.75)],
+ dtm:'70–85 days',sun:'Full sun',depth:'¼ in',space:'10–12 in',hardy:'Semi-hardy',cont:'Tight but possible',
+ harvest:'Cut the whole head at the base once firm.',
+ note:'Slower and fussier than leaf lettuce, and it gives you one harvest instead of many.',
+ local:'This is one of the few crops UMD gives an explicit fall <em>transplant</em> window for: first three weeks of August.'},
+
+{n:'Spinach',i:'🍃',c:'greens',w:[W('sow',3.35,4.7),W('sow',8,9.2)],
+ dtm:'40–50 days',sun:'Full sun',depth:'½ in',space:'3–4 in',hardy:'Hardy',cont:'Excellent',
+ harvest:'Pick outer leaves continuously; UMD shows harvest into mid-December.',
+ note:'Germinates badly in hot soil. Sow late August rather than early, or chill the seed in the fridge for a week first.',
+ local:'One of the best fall crops for this area — hardy enough to overwinter under a light cover and restart in February.'},
+
+{n:'Arugula',i:'🌿',c:'greens',w:[W('sow',3.5,6),W('sow',8,10)],
+ dtm:'30–40 days',sun:'Full sun / part shade',depth:'¼ in',space:'4 in',hardy:'Hardy',cont:'Excellent',
+ harvest:'Cut-and-come-again; flavor sharpens as it ages.',
+ note:'Fastest leafy green here after radish. Peppery, and much milder when grown cool.',
+ local:'Sow every 2–3 weeks Sept–Oct for a continuous fall supply.'},
+
+{n:'Swiss chard',i:'🌈',c:'greens',w:[W('sow',4.5,7.7)],
+ dtm:'50–70 days',sun:'Full sun',depth:'½–1 in',space:'8–12 in',hardy:'Semi-hardy',cont:'Good',
+ harvest:'Cut outer stalks; UMD ends the harvest bar mid-November.',
+ note:'Beautiful — "Bright Lights" is worth growing on looks alone — but it is the weakest link of the cool-season greens.',
+ local:'⚠️ UMD closes the sowing window in the <strong>third week of July</strong>. An August sowing is genuinely late. Kale or spinach will outlast it by about six weeks in the cold.'},
+
+{n:'Mustard greens',i:'🥬',c:'greens',w:[W('sow',4,5.5),W('sow',7.5,8.5)],
+ dtm:'40–50 days',sun:'Full sun',depth:'½ in',space:'6 in',hardy:'Hardy',cont:'Good',
+ harvest:'Young leaves are mild; older ones get hot.',
+ note:'Grows fast and takes frost well.',
+ local:'Sow mid-July to mid-August for fall.'},
+
+/* ---- BRASSICAS ---- */
+{n:'Kale',i:'🥬',c:'brassica',w:[W('sow',4,4.7),W('sow',7.35,8.5)],
+ dtm:'40–80 days (baby to full)',sun:'Full sun',depth:'½ in',space:'10–12 in',hardy:'Hardy — leaves take 15–20°F',cont:'Excellent',
+ harvest:'Pick lower leaves upward, never the growing tip. UMD draws the harvest bar to the <strong>fourth week of December</strong> — the longest of any crop.',
+ note:'Genuinely sweetens after frost; the cold converts starch to sugar. The single best anchor crop for a Maryland fall.',
+ local:'The one crop that truly needs the mid-August slot. Everything else on this chart can wait weeks longer.'},
+
+{n:'Collards',i:'🥬',c:'brassica',w:[W('indoor',3,5),W('transplant',4,6),W('sow',6,7.2),W('transplant',7,8.2)],
+ dtm:'60–75 days',sun:'Full sun',depth:'½ in',space:'12–18 in',hardy:'Hardy',cont:'Needs a big pot',
+ harvest:'Lower leaves upward; harvests into December.',
+ note:'Kale\'s bigger, slightly less cold-tolerant cousin. Classic Maryland fall green.',
+ local:'UMD gives a fall transplant window of early July to early August.'},
+
+{n:'Broccoli',i:'🥦',c:'brassica',w:[W('indoor',2.7,4),W('transplant',4,5),W('indoor',6.7,7.2),W('transplant',7.7,8.2)],
+ dtm:'55–70 days from transplant',sun:'Full sun',depth:'¼–½ in',space:'18 in',hardy:'Semi-hardy',cont:'One plant per large pot',
+ harvest:'Cut the central head while buds are tight; side shoots follow for weeks.',
+ note:'Fall broccoli beats spring broccoli here — heads form in cooling weather instead of racing the heat.',
+ local:'Transplant window is narrow: late July to early August. Miss it and heads button.'},
+
+{n:'Cauliflower',i:'🥬',c:'brassica',w:[W('indoor',3,4),W('transplant',4,5),W('indoor',6,7),W('transplant',7,8)],
+ dtm:'55–80 days',sun:'Full sun',depth:'¼–½ in',space:'18–24 in',hardy:'Semi-hardy',cont:'Difficult',
+ harvest:'Cut when the curd is firm and still white.',
+ note:'The fussiest brassica — any check in growth ruins the head.',
+ local:'Not a beginner crop in Maryland. Broccoli forgives; cauliflower does not.'},
+
+{n:'Cabbage',i:'🥬',c:'brassica',w:[W('indoor',2.5,3.5),W('transplant',3.5,4.5),W('indoor',6.5,7.5),W('transplant',7.5,8.5)],
+ dtm:'65–90 days',sun:'Full sun',depth:'¼–½ in',space:'12–18 in',hardy:'Hardy',cont:'Large pot only',
+ harvest:'Cut when the head is solid; splitting means it waited too long.',
+ note:'Reliable and storable.',
+ local:'Fall transplants mid-July to mid-August.'},
+
+{n:'Brussels sprouts',i:'🥬',c:'brassica',w:[W('indoor',5,6),W('transplant',6.5,7.5)],
+ dtm:'90–110 days',sun:'Full sun',depth:'½ in',space:'18–24 in',hardy:'Hardy',cont:'No',
+ harvest:'Sprouts mature bottom-up after frost.',
+ note:'The longest-season crop here. Transplant by mid-July or the sprouts never size up.',
+ local:'Frost genuinely improves them — leave them standing into December.'},
+
+{n:'Kohlrabi',i:'🥬',c:'brassica',w:[W('sow',4,5.5),W('sow',7,8.5)],
+ dtm:'45–60 days',sun:'Full sun',depth:'½ in',space:'6 in',hardy:'Hardy',cont:'Good',
+ harvest:'Pull at 2–3 in across; bigger turns woody.',
+ note:'Underrated, fast, and odd-looking enough to be fun.',
+ local:'Fall sowing early July to mid-August.'},
+
+{n:'Bok choy',i:'🥬',c:'brassica',w:[W('sow',4,5.25),W('sow',8.35,9.25)],
+ dtm:'45–55 days',sun:'Full sun / part shade',depth:'¼ in',space:'6–8 in',hardy:'Semi-hardy',cont:'Excellent',
+ harvest:'Cut the whole head, or take outer stalks.',
+ note:'Bolts fast in heat — a fall crop first and foremost.',
+ local:'Sow second week of August through the first week of September.'},
+
+{n:'Chinese cabbage',i:'🥬',c:'brassica',w:[W('sow',3.5,5),W('sow',7,8.25)],
+ dtm:'70–85 days',sun:'Full sun',depth:'¼–½ in',space:'12 in',hardy:'Semi-hardy',cont:'Large pot',
+ harvest:'Cut when the head firms.',
+ note:'Needs cool weather to head properly.',
+ local:'Fall window closes the first week of August — earlier than most brassicas.'},
+
+/* ---- ROOTS ---- */
+{n:'Radish',i:'🔴',c:'root',w:[W('sow',3.5,5.2),W('sow',7.5,9.5)],
+ dtm:'25–35 days',sun:'Full sun',depth:'½ in',space:'1–2 in',hardy:'Hardy',cont:'Excellent',
+ harvest:'Pull promptly — a few days late and they split and turn hot.',
+ note:'The morale crop. Nothing else gives a beginner a harvest this fast.',
+ local:'Sowable all the way to mid-September here, so it never needs to compete for the August slot.'},
+
+{n:'Carrot',i:'🥕',c:'root',w:[W('sow',4.5,6),W('sow',6.5,8)],
+ dtm:'65–80 days',sun:'Full sun',depth:'¼ in',space:'2–3 in',hardy:'Hardy',cont:'Short varieties only',
+ harvest:'Fall carrots sweeten hard after frost.',
+ note:'Slow, erratic germination — keep the surface damp for two full weeks.',
+ local:'Needs 10+ in of loose soil; most shallow containers will fork the roots.'},
+
+{n:'Beet',i:'🟣',c:'root',w:[W('sow',4,8)],
+ dtm:'50–60 days',sun:'Full sun',depth:'½–1 in',space:'3–4 in',hardy:'Semi-hardy',cont:'Good',
+ harvest:'Both root and greens are edible.',
+ note:'Each "seed" is a cluster, so expect to thin.',
+ local:'⚠️ The fall direct-sow window closes around <strong>August 1</strong> — one of the earliest cutoffs on this chart.'},
+
+{n:'Turnip',i:'⚪',c:'root',w:[W('sow',3.5,5),W('sow',7.35,9)],
+ dtm:'40–55 days',sun:'Full sun',depth:'½ in',space:'4 in',hardy:'Hardy',cont:'Good',
+ harvest:'Roots and greens both; pull small for tenderness.',
+ note:'Fast and very cold-tolerant.',
+ local:'Sow second week of July through August.'},
+
+{n:'Rutabaga',i:'🟡',c:'root',w:[W('sow',7,8)],
+ dtm:'90–100 days',sun:'Full sun',depth:'½ in',space:'6–8 in',hardy:'Hardy',cont:'No',
+ harvest:'After frost, for sweetness.',
+ note:'July only — a single narrow window all year.',
+ local:'Easy to miss; it has the tightest window on the chart.'},
+
+{n:'Parsnip',i:'🥕',c:'root',w:[W('sow',4,5)],
+ dtm:'100–130 days',sun:'Full sun',depth:'½ in',space:'3–4 in',hardy:'Very hardy',cont:'No',
+ harvest:'Leave in the ground through frost — it is required, not optional, for flavor.',
+ note:'Seed is short-lived; buy fresh every year.',
+ local:'Plant April, harvest after Thanksgiving.'},
+
+{n:'Potato',i:'🥔',c:'root',w:[W('plant',3.5,5.5)],
+ dtm:'90–110 days',sun:'Full sun',depth:'4 in, hilled',space:'12 in',hardy:'Tender tops',cont:'Good in a deep bag',
+ harvest:'Dig once the tops die back.',
+ note:'Plant seed potatoes, not grocery-store ones.',
+ local:'St. Patrick\'s Day is the traditional Maryland planting date and it is roughly right.'},
+
+{n:'Sweet potato',i:'🍠',c:'root',w:[W('indoor',4.5,5.5),W('transplant',5.5,6.5)],
+ dtm:'90–120 days',sun:'Full sun',depth:'Slips, buried deep',space:'12–18 in',hardy:'Very tender',cont:'Large container',
+ harvest:'Before first frost — cold ruins the roots.',
+ note:'Grown from slips you sprout indoors, not from seed.',
+ local:'Loves a Maryland summer. Transplant mid-May to mid-June.'},
+
+/* ---- LEGUMES ---- */
+{n:'Peas (snap/snow)',i:'🫛',c:'legume',w:[W('sow',3.5,5)],
+ dtm:'55–70 days',sun:'Full sun',depth:'1–1½ in',space:'2 in',hardy:'Hardy vines',cont:'Good with a trellis',
+ harvest:'Pick constantly to keep pods coming.',
+ note:'Vines survive to the low 20s and regrow from below ground — but a frost during <em>bloom</em> aborts the pods.',
+ local:'⚠️ UMD lists <strong>no fall pea window at all</strong> for the current calendar. A late-August sowing flowers right on top of the median first frost. Save the trellis for spring.'},
+
+{n:'Beans, snap',i:'🫘',c:'legume',w:[W('sow',5,8.25)],
+ dtm:'50–60 days',sun:'Full sun',depth:'1 in',space:'3–4 in',hardy:'Tender',cont:'Bush types fine',
+ harvest:'Pick every other day.',
+ note:'The longest sowing window of any crop here — May through the first week of August.',
+ local:'A first-week-of-August sowing still beats frost. The last easy summer crop you can start.'},
+
+{n:'Beans, lima',i:'🫘',c:'legume',w:[W('sow',5.5,7.5)],
+ dtm:'65–80 days',sun:'Full sun',depth:'1–1½ in',space:'4–6 in',hardy:'Tender',cont:'Bush types',
+ harvest:'When pods feel full.',
+ note:'Needs warmer soil than snap beans.',
+ local:'Mid-May through mid-July.'},
+
+{n:'Southern peas',i:'🫘',c:'legume',w:[W('sow',5.5,5.9)],
+ dtm:'60–90 days',sun:'Full sun',depth:'1 in',space:'4 in',hardy:'Very tender',cont:'Possible',
+ harvest:'Shell fresh or dry on the vine.',
+ note:'Thrives in the heat that stalls everything else.',
+ local:'Narrow window: mid-to-late May.'},
+
+/* ---- NIGHTSHADES ---- */
+{n:'Tomato',i:'🍅',c:'night',w:[W('indoor',3.5,5.7),W('transplant',5,7.2)],
+ dtm:'60–85 days from transplant',sun:'Full sun, 8 hrs',depth:'¼ in; bury stems deep',space:'24–36 in',hardy:'Very tender',cont:'Determinate/patio types',
+ harvest:'Pick at first blush and finish indoors to beat the birds.',
+ note:'Bury two-thirds of the transplant stem — it roots along the buried portion.',
+ local:'Don\'t rush it. Maryland soil is often still too cold in early May; a Memorial Day transplant catches up to a May 1 one.'},
+
+{n:'Pepper',i:'🌶',c:'night',w:[W('indoor',3.5,4.5),W('transplant',5.5,6.5)],
+ dtm:'60–90 days from transplant',sun:'Full sun',depth:'¼ in',space:'18 in',hardy:'Very tender',cont:'Excellent',
+ harvest:'Green any time; leave for color and sweetness.',
+ note:'Wants warmer soil than tomatoes — mid-May at the earliest.',
+ local:'One of the best container crops for a hot Maryland deck.'},
+
+{n:'Eggplant',i:'🍆',c:'night',w:[W('indoor',4,5),W('transplant',5.5,6.5)],
+ dtm:'70–85 days',sun:'Full sun',depth:'¼ in',space:'18–24 in',hardy:'Very tender',cont:'Good',
+ harvest:'While the skin is glossy.',
+ note:'The most heat-loving of the three nightshades.',
+ local:'Flea beetles are the main local pest; cover young plants.'},
+
+{n:'Tomatillo',i:'🟢',c:'night',w:[W('indoor',3.7,4.5),W('transplant',5,6.5)],
+ dtm:'75–90 days',sun:'Full sun',depth:'¼ in',space:'24–36 in',hardy:'Very tender',cont:'Large pot',
+ harvest:'When husks split.',
+ note:'Plant at least two — they will not set fruit alone.',
+ local:'Vigorous and sprawling; give it more room than you think.'},
+
+{n:'Ground cherry',i:'🟡',c:'night',w:[W('sow',5,6.25)],
+ dtm:'70–80 days',sun:'Full sun',depth:'¼ in',space:'24 in',hardy:'Very tender',cont:'Good',
+ harvest:'Collect fruit off the ground when husks turn papery.',
+ note:'Self-seeds enthusiastically once established.',
+ local:'Sow May through the first week of June.'},
+
+/* ---- CUCURBITS ---- */
+{n:'Cucumber',i:'🥒',c:'curcurb',w:[W('sow',5.5,7.5)],
+ dtm:'50–65 days',sun:'Full sun',depth:'1 in',space:'12 in on a trellis',hardy:'Tender',cont:'Good vertically',
+ harvest:'Pick daily once they start.',
+ note:'Trellising doubles yield per square foot and keeps fruit clean.',
+ local:'This is what those fan trellises are best saved for. Sow mid-May through mid-July.'},
+
+{n:'Squash, summer',i:'🥒',c:'curcurb',w:[W('sow',5,6.5)],
+ dtm:'45–60 days',sun:'Full sun',depth:'1 in',space:'24–36 in',hardy:'Tender',cont:'Large pot',
+ harvest:'Small and often.',
+ note:'Squash vine borer is the Maryland killer — a second sowing in early July dodges the worst of it.',
+ local:'Two plants will feed a household. Three is a mistake everyone makes once.'},
+
+{n:'Squash, winter',i:'🎃',c:'curcurb',w:[W('sow',5.5,6.5)],
+ dtm:'85–110 days',sun:'Full sun',depth:'1 in',space:'36–48 in',hardy:'Tender',cont:'No',
+ harvest:'When the rind resists a fingernail; cure two weeks before storing.',
+ note:'Needs real ground space.',
+ local:'Sow mid-May to mid-June to ripen before frost.'},
+
+{n:'Pumpkin',i:'🎃',c:'curcurb',w:[W('sow',5.5,6.5)],
+ dtm:'100–120 days',sun:'Full sun',depth:'1 in',space:'48 in',hardy:'Tender',cont:'No',
+ harvest:'Cut with a stem handle.',
+ note:'Count back from Halloween: a June 1 sowing lands late September.',
+ local:'Mid-May to mid-June for an October pumpkin.'},
+
+{n:'Watermelon',i:'🍉',c:'curcurb',w:[W('sow',5.5,6.5)],
+ dtm:'80–100 days',sun:'Full sun',depth:'1 in',space:'36–48 in',hardy:'Very tender',cont:'No',
+ harvest:'When the ground spot turns cream and the tendril dries.',
+ note:'Wants heat and space.',
+ local:'Maryland summers are long enough — barely. Don\'t sow past mid-June.'},
+
+{n:'Cantaloupe',i:'🍈',c:'curcurb',w:[W('sow',5.5,6.5)],
+ dtm:'75–90 days',sun:'Full sun',depth:'1 in',space:'24–36 in',hardy:'Very tender',cont:'No',
+ harvest:'When it slips from the vine with light pressure.',
+ note:'Ripeness is by smell, not look.',
+ local:'Same window as watermelon.'},
+
+/* ---- ALLIUMS ---- */
+{n:'Onion',i:'🧅',c:'allium',w:[W('indoor',2,3),W('transplant',4,5)],
+ dtm:'100–120 days',sun:'Full sun',depth:'¼ in',space:'4 in',hardy:'Hardy',cont:'Scallions only',
+ harvest:'When tops fall over; cure in shade two weeks.',
+ note:'Buy <em>intermediate-day</em> varieties — Maryland is too far south for long-day types and too far north for short-day.',
+ local:'That day-length mismatch is the number one reason onions fail here.'},
+
+{n:'Garlic',i:'🧄',c:'allium',w:[W('plant',10.5,11.5)],
+ dtm:'~9 months',sun:'Full sun',depth:'2 in, pointy end up',space:'6 in',hardy:'Very hardy',cont:'Good',
+ harvest:'Next July, when the lower third of leaves brown.',
+ note:'Plant in fall, forget it, harvest next summer. Hardneck types suit Maryland.',
+ local:'Mid-October to mid-November — the only crop you plant as everything else shuts down.'},
+
+{n:'Leek',i:'🥬',c:'allium',w:[W('sow',4,5)],
+ dtm:'100–120 days',sun:'Full sun',depth:'½ in',space:'6 in',hardy:'Very hardy',cont:'Deep pot',
+ harvest:'Hill soil around stems to blanch; harvest into winter.',
+ note:'Slow but very cold-tolerant.',
+ local:'Stands in the garden through Maryland winters.'},
+
+{n:'Shallot',i:'🧅',c:'allium',w:[W('sow',3.7,5),W('plant',9.7,10.5)],
+ dtm:'90–120 days',sun:'Full sun',depth:'1–2 in',space:'6 in',hardy:'Hardy',cont:'Good',
+ harvest:'When tops yellow.',
+ note:'Fall-planted sets give the biggest bulbs.',
+ local:'Late September to mid-October for fall planting.'},
+
+{n:'Chives',i:'🌱',c:'allium',w:[W('sow',4,6),W('transplant',4,6)],
+ dtm:'60 days, then perennial',sun:'Full sun / part shade',depth:'¼ in',space:'8 in',hardy:'Very hardy perennial',cont:'Excellent',
+ harvest:'Snip outer leaves all season; flowers are edible.',
+ note:'Plant once, have it forever.',
+ local:'Dies back in winter and returns on its own every March.'},
+
+/* ---- HERBS ---- */
+{n:'Basil',i:'🌿',c:'herb',w:[W('indoor',3,4.5),W('sow',5.5,7),W('transplant',5.5,6.5)],
+ dtm:'50–60 days',sun:'Full sun',depth:'¼ in',space:'10–12 in',hardy:'Very tender',cont:'Excellent',
+ harvest:'Pinch above a leaf pair to force branching; never strip the stem.',
+ note:'Dies at the first breath of frost — it is the canary for the end of the season.',
+ local:'Do not set it out before mid-May; cold nights stunt it permanently.'},
+
+{n:'Cilantro',i:'🌿',c:'herb',w:[W('sow',3,5),W('sow',8,10)],
+ dtm:'45–55 days',sun:'Full sun / part shade',depth:'½ in',space:'4–6 in',hardy:'Hardy',cont:'Excellent',
+ harvest:'Cut outer leaves; it bolts fast once warm.',
+ note:'Direct sow only — it hates being transplanted.',
+ local:'A far better fall crop than a spring one here. Sown in September it grows slowly and cleanly all autumn.'},
+
+{n:'Dill',i:'🌿',c:'herb',w:[W('sow',4,6),W('sow',8,9)],
+ dtm:'40–60 days',sun:'Full sun',depth:'¼ in',space:'8–10 in',hardy:'Semi-hardy',cont:'Deep pot',
+ harvest:'Leaves any time; seed heads at the end.',
+ note:'Direct sow — the taproot resents disturbance.',
+ local:'Self-seeds happily once you let one plant flower.'},
+
+{n:'Parsley',i:'🌿',c:'herb',w:[W('indoor',2.5,3.5),W('sow',4,5),W('transplant',4,5.5)],
+ dtm:'70–90 days',sun:'Full sun / part shade',depth:'¼ in',space:'8–10 in',hardy:'Hardy biennial',cont:'Excellent',
+ harvest:'Outer stems first, all season.',
+ note:'Germination is famously slow — two to three weeks. Soak seed overnight.',
+ local:'Overwinters here and flowers its second year; mulch it and it will feed you into spring.'},
+
+{n:'Oregano',i:'🌿',c:'herb',w:[W('transplant',4,6)],
+ dtm:'Perennial',sun:'Full sun',depth:'Surface',space:'12 in',hardy:'Hardy perennial',cont:'Excellent',
+ harvest:'Best flavor just before flowering.',
+ note:'Wants poor, dry soil — the more you baby it the blander it tastes.',
+ local:'Reliably perennial in 7b. Mulch after the ground freezes.'},
+
+{n:'Thyme',i:'🌿',c:'herb',w:[W('transplant',4,6)],
+ dtm:'Perennial',sun:'Full sun',depth:'Surface',space:'12 in',hardy:'Hardy perennial',cont:'Excellent',
+ harvest:'Snip sprigs year-round; semi-evergreen here.',
+ note:'Needs sharp drainage above all else.',
+ local:'Survives Maryland winters easily; often stays green through them.'},
+
+{n:'Sage',i:'🌿',c:'herb',w:[W('transplant',4,6)],
+ dtm:'Perennial',sun:'Full sun',depth:'¼ in',space:'18–24 in',hardy:'Hardy perennial',cont:'Good',
+ harvest:'Leaves as needed; prune hard each spring.',
+ note:'Gets woody after 3–4 years — replace it then.',
+ local:'Very reliable perennial in Anne Arundel County.'},
+
+{n:'Mint',i:'🌿',c:'herb',w:[W('transplant',4,6)],
+ dtm:'Perennial',sun:'Part shade',depth:'Surface',space:'Contain it',hardy:'Very hardy perennial',cont:'Container only — seriously',
+ harvest:'Cut hard and often.',
+ note:'Never put mint in a bed. It runs and it will win.',
+ local:'Thrives here to the point of being a nuisance.'},
+
+{n:'Rosemary',i:'🌿',c:'herb',w:[W('transplant',4,6)],
+ dtm:'Perennial',sun:'Full sun',depth:'Transplant',space:'24–36 in',hardy:'Marginal in 7b',cont:'Good — can come inside',
+ harvest:'Year-round in a mild winter.',
+ note:'The one herb here that Maryland winters can actually kill.',
+ local:'Choose a hardy cultivar such as "Arp" or "Hill Hardy", plant against a south wall, or grow it in a pot you can move.'},
+
+/* ---- FRUIT / PERENNIAL ---- */
+{n:'Strawberry',i:'🍓',c:'fruit',w:[W('plant',4,5),W('plant',9,10)],
+ dtm:'Fruits the following spring',sun:'Full sun',depth:'Crown at soil line',space:'12–18 in',hardy:'Hardy perennial',cont:'Excellent',
+ harvest:'May–June for June-bearers.',
+ note:'Pinch off the first year\'s flowers to build the plant. It hurts, and it doubles year two.',
+ local:'Set the crown exactly at soil level — buried crowns rot, exposed ones dry out.'},
+
+{n:'Blueberry',i:'🫐',c:'fruit',w:[W('plant',3,5),W('plant',10,11.5)],
+ dtm:'Fruits year 2–3',sun:'Full sun',depth:'Shrub',space:'4–5 ft',hardy:'Hardy shrub',cont:'Good in a half-barrel',
+ harvest:'June–August depending on variety.',
+ note:'Plant two different varieties for cross-pollination.',
+ local:'Demands acidic soil, pH 4.5–5.5. Most Maryland soil is too sweet — amend it or grow in a pot.'},
+
+{n:'Raspberry',i:'🍇',c:'fruit',w:[W('plant',3,4.5)],
+ dtm:'Fruits year 2',sun:'Full sun',depth:'Canes',space:'24–36 in',hardy:'Hardy',cont:'Difficult',
+ harvest:'Summer or fall depending on type.',
+ note:'Everbearing types give a light summer crop and a heavy fall one.',
+ local:'Plant dormant canes in early spring.'},
+
+{n:'Asparagus',i:'🌱',c:'fruit',w:[W('plant',3.5,4.5)],
+ dtm:'First real harvest year 3',sun:'Full sun',depth:'Crowns 6–8 in deep',space:'12–18 in',hardy:'Very hardy perennial',cont:'No',
+ harvest:'April–June, then let the ferns feed the crown.',
+ note:'A twenty-year investment. Do not harvest at all the first two years.',
+ local:'Plant crowns mid-March to mid-April.'},
+
+{n:'Rhubarb',i:'🌿',c:'fruit',w:[W('plant',3,4.5)],
+ dtm:'First harvest year 2–3',sun:'Full sun / part shade',depth:'Crown 2 in below soil',space:'36 in',hardy:'Hardy perennial',cont:'Large pot',
+ harvest:'Pull stalks in spring — never eat the leaves, they are toxic.',
+ note:'Maryland summers are near its heat limit; give it afternoon shade.',
+ local:'Marginal but doable in 7b with some shade.'},
+
+/* ---- FLOWERS ---- */
+{n:'Spring bulbs',i:'🌷',c:'flower',w:[W('plant',10,11.5)],
+ dtm:'Blooms Mar–May',sun:'Full sun',depth:'3× the bulb height',space:'4–6 in',hardy:'Very hardy',cont:'Excellent',
+ harvest:'Tulip, daffodil, crocus, allium, scilla, hyacinth.',
+ note:'They need a cold winter to bloom — that is why they go in during fall.',
+ local:'UMD says plant in October; keep bulbs at 60–65°F until then and don\'t plant late.'},
+
+{n:'Summer bulbs',i:'🌺',c:'flower',w:[W('plant',5,6.5)],
+ dtm:'Blooms Jul–Sep',sun:'Full sun',depth:'4–6 in',space:'8–12 in',hardy:'Tender — lift in fall',cont:'Excellent',
+ harvest:'Dahlia, gladiolus, canna, caladium, calla, tuberous begonia.',
+ note:'Plant gladiolus every two weeks for a rolling show instead of one big week.',
+ local:'Plant after frost danger passes. Lift and store the tubers before winter — they will not survive in the ground here.'},
+
+{n:'Colchicum',i:'🌸',c:'flower',w:[W('plant',8,9)],
+ dtm:'Blooms Sep–Oct',sun:'Full sun / part shade',depth:'3–4 in',space:'6 in',hardy:'Hardy',cont:'Good',
+ harvest:'Leafless pink blooms in autumn.',
+ note:'The oddity of the bulb world — plant in August, bloom in weeks.',
+ local:'One of the only things you plant in August purely for flowers.'},
+
+{n:'Pansy / viola',i:'🌼',c:'flower',w:[W('transplant',9,11),W('transplant',3,4.5)],
+ dtm:'Blooms fall through spring',sun:'Full sun / part shade',depth:'Transplant',space:'6–8 in',hardy:'Hardy',cont:'Excellent',
+ harvest:'Edible flowers, too.',
+ note:'Fall-planted pansies bloom, sulk through the coldest weeks, then explode again in March.',
+ local:'The best value flower in a Maryland winter — plant in October for six months of color.'},
+
+{n:'Zinnia',i:'🌻',c:'flower',w:[W('sow',5,7)],
+ dtm:'60–70 days',sun:'Full sun',depth:'¼ in',space:'9–12 in',hardy:'Tender',cont:'Excellent',
+ harvest:'Cut hard and often — it flowers more.',
+ note:'The easiest cut flower there is. Direct sow, no fuss.',
+ local:'Powdery mildew arrives with August humidity; space them generously.'},
+
+{n:'Marigold',i:'🌼',c:'flower',w:[W('sow',5,6.5),W('transplant',5,6.5)],
+ dtm:'50–60 days',sun:'Full sun',depth:'¼ in',space:'8–10 in',hardy:'Tender',cont:'Excellent',
+ harvest:'Deadhead to keep it going.',
+ note:'Blooms until frost with almost no attention.',
+ local:'Common companion planting around Maryland tomato beds.'},
+
+{n:'Sunflower',i:'🌻',c:'flower',w:[W('sow',5,8)],
+ dtm:'70–100 days',sun:'Full sun',depth:'1 in',space:'12–24 in',hardy:'Tender',cont:'Dwarf types',
+ harvest:'Cut for vases, or leave heads for the birds.',
+ note:'Sow every two weeks through July for continuous bloom.',
+ local:'A first-week-of-August sowing of a fast variety still flowers before frost.'},
+];
+
+/* ---------------- render ---------------- */
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const TYPE_LABEL = {indoor:'Start indoors',sow:'Direct sow outside',transplant:'Set out transplants',plant:'Plant bulbs / crowns / slips'};
+
+const now = new Date();
+const nowDec = (now.getMonth()+1) + (now.getDate()-1)/ new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+const pct = d => ((d-1)/12)*100;
+
+let activeCat = 'all';
+
+/* month header */
+const mh = document.getElementById('monthHead');
+mh.innerHTML = '<div class="lbl-sp"></div><div class="mrow">' +
+  MONTHS.map((m,idx)=>`<div class="m${idx+1===now.getMonth()+1?' is-now':''}">${m}</div>`).join('') +
+  `<div class="nowline" style="left:${pct(nowDec)}%"></div></div>`;
+
+function seasonsHTML(){
+  return '<div class="seasons">'+
+    '<i class="s-win" style="flex:2"></i><i class="s-spr" style="flex:3"></i>'+
+    '<i class="s-sum" style="flex:3"></i><i class="s-fal" style="flex:3"></i>'+
+    '<i class="s-win" style="flex:1"></i></div>';
+}
+
+function render(){
+  const host = document.getElementById('chart');
+  host.innerHTML = CATS.filter(([id])=> activeCat==='all' || activeCat===id).map(([id,label,icon])=>{
+    const rows = CROPS.filter(c=>c.c===id).map((c)=>{
+      const gi = CROPS.indexOf(c);
+      const bars = c.w.map(w=>
+        `<i class="bar b-${w.t}" style="left:${pct(w.a)}%;width:${pct(w.b)-pct(w.a)}%" title="${TYPE_LABEL[w.t]}"></i>`
+      ).join('');
+      return `<div class="row">
+        <button class="lbl" data-i="${gi}"><span class="ic">${c.i}</span><span class="nm">${c.n}</span></button>
+        <div class="track">${seasonsHTML()}${bars}<div class="nowline" style="left:${pct(nowDec)}%"></div></div>
+      </div>`;
+    }).join('');
+    return `<div class="catgroup"><div class="cathead">${icon} ${label}</div><div class="catbody">${rows}</div></div>`;
+  }).join('');
+}
+
+/* filters */
+const fWrap = document.getElementById('filters');
+fWrap.innerHTML = [['all','Everything','🌍'],...CATS]
+  .map(([id,label,icon])=>`<button class="btn" data-cat="${id}" aria-pressed="${id==='all'}">${icon} ${label}</button>`).join('');
+fWrap.addEventListener('click',e=>{
+  const b = e.target.closest('[data-cat]'); if(!b) return;
+  activeCat = b.dataset.cat;
+  [...fWrap.querySelectorAll('[data-cat]')].forEach(x=>x.setAttribute('aria-pressed', x.dataset.cat===activeCat));
+  render();
+});
+
+/* "right now" */
+function inWindow(c){ return c.w.filter(w => nowDec>=w.a && nowDec<=w.b); }
+const plantable = CROPS.map((c,i)=>({c,i,hits:inWindow(c)})).filter(x=>x.hits.length);
+document.getElementById('nowDate').textContent =
+  now.toLocaleDateString('en-US',{month:'long',day:'numeric'}).toUpperCase();
+document.getElementById('nowGrid').innerHTML = plantable.length
+  ? plantable.map(x=>`<button class="now-chip" data-i="${x.i}"><span class="ic">${x.c.i}</span>
+      <span>${x.c.n}<br><small style="color:var(--ink-soft)">${[...new Set(x.hits.map(h=>TYPE_LABEL[h.t]))].join(' · ')}</small></span></button>`).join('')
+  : '<p>Nothing is in its planting window this week — a good time to plan, clean tools, and order seed.</p>';
+
+const dl = nowDec >= 11.55 || nowDec < 1.85;
+document.getElementById('nowNote').innerHTML = dl
+  ? '🌑 <strong>You are inside the 10-hour window (Nov 17 – Jan 26).</strong> Anything already standing is holding, not growing. Harvest from what is out there; don\'t expect new growth until late January.'
+  : '💡 Remember UMD\'s <strong>short-day factor</strong>: for anything planted now to mature in fall, add <strong>10–14 days</strong> to the days-to-maturity on the seed packet. Growth slows sharply as you approach November 17.';
+
+/* modal */
+const scrim = document.getElementById('scrim');
+function openCrop(i){
+  const c = CROPS[i];
+  document.getElementById('mIcon').textContent = c.i;
+  document.getElementById('mTitle').textContent = c.n;
+  document.getElementById('mCat').innerHTML = (CATS.find(k=>k[0]===c.c)||[])[1] || '';
+  document.getElementById('mStats').innerHTML = [
+    ['Days to maturity',c.dtm],['Sun',c.sun],['Seed depth',c.depth],
+    ['Spacing',c.space],['Hardiness',c.hardy],['In containers',c.cont]
+  ].map(([k,v])=>`<div class="stat"><b>${k}</b><span>${v}</span></div>`).join('');
+  const mon = mo => MONTHS[((mo-1)%12+12)%12];
+  const part = fr => fr<0.25?'early ':fr<0.6?'mid-':fr<0.9?'late ':'end of ';
+  const fmtStart = m => { const mo=Math.floor(m); return part(m-mo) + mon(mo); };
+  // a window ending at e.g. 9.0 means "through the end of August", not "early September"
+  const fmtEnd = m => { const mo=Math.floor(m), fr=m-mo;
+    return fr<0.1 ? 'end of ' + mon(mo-1) : part(fr) + mon(mo); };
+  document.getElementById('mWin').innerHTML = c.w.map(w=>
+    `<div><i class="sw b-${w.t}"></i> <strong>${TYPE_LABEL[w.t]}</strong> — ${fmtStart(w.a)} to ${fmtEnd(w.b)}</div>`
+  ).join('');
+  document.getElementById('mNote').innerHTML = `<strong>Harvest.</strong> ${c.harvest}<br><br>${c.note}`;
+  document.getElementById('mLocal').innerHTML = `<strong>📍 Here in Anne Arundel County.</strong> ${c.local}`;
+  scrim.classList.add('open');
+  document.getElementById('mClose').focus();
+}
+document.addEventListener('click',e=>{
+  const t = e.target.closest('[data-i]');
+  if(t){ openCrop(+t.dataset.i); return; }
+  if(e.target===scrim || e.target.id==='mClose') scrim.classList.remove('open');
+});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') scrim.classList.remove('open'); });
+
+render();
+</script>
+</body>
+</html>
